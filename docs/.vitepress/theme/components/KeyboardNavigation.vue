@@ -5,7 +5,7 @@ import { useRouter, useRoute } from 'vitepress'
 const router = useRouter()
 const route = useRoute()
 
-const isChapterPage = computed(() => route.path.includes('/chapters/chapter_'))
+const isChapterPage = computed(() => /chapter_\d+/.test(route.path))
 
 function getNextChapterLink(): string | null {
   const match = route.path.match(/chapter_(\d+)/)
