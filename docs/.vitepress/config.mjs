@@ -38,6 +38,8 @@ export default defineConfig({
 
   lang: 'zh-CN',
 
+  base: '/doupo-fanfic-ref/',
+
   cleanUrls: true,
 
   head: [
