@@ -4,7 +4,7 @@
   "description": "斗破苍穹章节摘要静态网站",
   "scripts": {
     "dev": "vitepress dev docs",
-    "build": "node scripts/prepare-chapters.js && vitepress build docs",
+    "build": "vitepress build docs",
     "preview": "vitepress preview docs"
   },
   "devDependencies": {
