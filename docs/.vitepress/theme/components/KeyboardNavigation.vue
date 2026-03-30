@@ -1,25 +1,32 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute } from 'vitepress'
+import { useRouter, useRoute } from 'vitepress'
 
+const router = useRouter()
 const route = useRoute()
 
 const isChapterPage = computed(() => /chapter_\d+/.test(route.path))
 
-function navigate(direction: 'prev' | 'next') {
+function getNextChapterLink(): string | null {
   const match = route.path.match(/chapter_(\d+)/)
-  if (!match) return
+  if (!match) return null
 
   const currentNum = parseInt(match[1])
-  if (direction === 'prev' && currentNum <= 1) return
-  if (direction === 'next' && currentNum >= 1521) return
+  if (currentNum > 1521) return null
 
-  const newNum = direction === 'prev' ? currentNum - 1 : currentNum + 1
-  const numStr = String(newNum).padStart(4, '0')
+  const nextNum = String(currentNum + 1).padStart(4, '0')
+  return `/doupo-fanfic-ref/chapters/chapter_${nextNum}`
+}
 
-  // Extract base path from current location
-  const base = window.location.pathname.replace(/chapters\/chapter_\d+$/, '')
-  window.location.href = base + 'chapter_' + numStr
+function getPrevChapterLink(): string | null {
+  const match = route.path.match(/chapter_(\d+)/)
+  if (!match) return null
+
+  const currentNum = parseInt(match[1])
+  if (currentNum <= 1) return null
+
+  const prevNum = String(currentNum - 1).padStart(4, '0')
+  return `/doupo-fanfic-ref/chapters/chapter_${prevNum}`
 }
 
 function handleKeydown(e: KeyboardEvent) {
@@ -27,11 +34,17 @@ function handleKeydown(e: KeyboardEvent) {
   if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
 
   if (e.key === 'ArrowRight') {
-    e.preventDefault()
-    navigate('next')
+    const nextLink = getNextChapterLink()
+    if (nextLink) {
+      e.preventDefault()
+      router.go(nextLink)
+    }
   } else if (e.key === 'ArrowLeft') {
-    e.preventDefault()
-    navigate('prev')
+    const prevLink = getPrevChapterLink()
+    if (prevLink) {
+      e.preventDefault()
+      router.go(prevLink)
+    }
   }
 }
 
@@ -42,10 +55,10 @@ if (typeof window !== 'undefined') {
 
 <template>
   <div v-if="isChapterPage" class="keyboard-hint">
-    <span class="hint-item" @click="navigate('prev')">
+    <span class="hint-item" @click="router.go(getPrevChapterLink() || '/')">
       <kbd>←</kbd> 上一章
     </span>
-    <span class="hint-item" @click="navigate('next')">
+    <span class="hint-item" @click="router.go(getNextChapterLink() || '/')">
       <kbd>→</kbd> 下一章
     </span>
   </div>
