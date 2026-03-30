@@ -1,0 +1,4 @@
+/* Custom styles for keyboard navigation hint */
+.VPContent.is-home .keyboard-hint {
+  display: none;
+}

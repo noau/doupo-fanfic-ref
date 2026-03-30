@@ -1,0 +1,14 @@
+{
+  "name": "fan-ref-site",
+  "version": "1.0.0",
+  "description": "斗破苍穹章节摘要静态网站",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "node scripts/prepare-chapters.js && vitepress build docs",
+    "preview": "vitepress preview docs"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.3",
+    "vue": "^3.5.13"
+  }
+}
